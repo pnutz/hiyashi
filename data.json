@@ -1,0 +1,171 @@
+{
+    "units": {
+        "ounces": "oz",
+        "tablespoons": "tbsp",
+        "teaspoons": "tsp",
+        "minutes": "min",
+        "cups": "cups"
+    },
+    "categories": {
+        "noodles": {
+            "ramen_noodles": {
+                "label": "Chilled Ramen Noodles",
+                "ingredients": {
+                    "ramen_noodles": {
+                        "label": "Ramen Noodles",
+                        "serving": {
+                            "quantity": 6,
+                            "unit": "ounces"
+                        }
+                    }
+                },
+                "time": {
+                    "cook": {
+                        "quantity": 3,
+                        "unit": "minutes"
+                    }
+                },
+                "recipe": [
+                    "Bring a saucepan of water to a boil. Add the ramen noodles and cook according to package instructions (approximately 3 minutes). Drain the water and rinse the noodles. Chill the noodles in ice water."
+                ]
+            }
+        },
+        "sauces": {
+            "soy_dressing": {
+                "label": "Soy Sauce Dressing",
+                "ingredient_category": "Soy Sauce Dressing Ingredients",
+                "ingredients": {
+                    "soy_sauce": {
+                        "label": "Soy Sauce",
+                        "serving": {
+                            "quantity": 2,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "sugar": {
+                        "label": "Granulated Sugar",
+                        "serving": {
+                            "quantity": 1.33,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "rice_vinegar": {
+                        "label": "Rice Vinegar",
+                        "serving": {
+                            "quantity": 1,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "sesame_oil": {
+                        "label": "Sesame Oil",
+                        "serving": {
+                            "quantity": 0.66,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "water": {
+                        "label": "Water",
+                        "serving": {
+                            "quantity": 0.66,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "sesame_seeds": {
+                        "label": "Sesame Seeds (Roasted/Toasted)",
+                        "serving": {
+                            "quantity": 0.33,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "grated_ginger": {
+                        "label": "Grated Ginger",
+                        "serving": {
+                            "quantity": 0.0833,
+                            "unit": "teaspoons"
+                        }
+                    },
+                    "chili_oil": {
+                        "label": "La-yu (Japanese Chili Oil)",
+                        "serving": {
+                            "quantity": 0.166,
+                            "unit": "teaspoons"
+                        }
+                    }
+                },
+                "recipe": [
+                    "Combine all the noodle dressing ingredients in a medium bowl and whisk all together. Refrigerator to chill."
+                ]
+            },
+            "sesame_dressing": {
+                "label": "Sesame Dressing",
+                "ingredient_category": "Sesame Dressing Ingredients",
+                "ingredients": {
+                    "chicken_stock": {
+                        "label": "Chinese Chicken Stock",
+                        "serving": {
+                            "quantity": 2,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "soy_sauce": {
+                        "label": "Soy Sauce",
+                        "serving": {
+                            "quantity": 1,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "sugar": {
+                        "label": "Granulated Sugar",
+                        "serving": {
+                            "quantity": 1.25,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "rice_vinegar": {
+                        "label": "Rice Vinegar",
+                        "serving": {
+                            "quantity": 1,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "sesame_oil": {
+                        "label": "Sesame Oil",
+                        "serving": {
+                            "quantity": 0.75,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "sesame_paste": {
+                        "label": "White Sesame Paste",
+                        "serving": {
+                            "quantity": 0.75,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "sesame_seeds": {
+                        "label": "Sesame Seeds (Roasted/Toasted)",
+                        "serving": {
+                            "quantity": 0.125,
+                            "unit": "teaspoons"
+                        }
+                    }
+                },
+                "recipe": [
+                    "Put all the noodle dressing ingredients in a small sauce pan over high heat. Bring it to a bowl and simmer for a few minutes or until all ingredients have dissolved. Turn the heat off and put it aside to cool down. Refrigerate to chill."
+                ]
+            }
+        },
+        "meats": {
+        },
+        "seafoods": {
+        },
+        "fruits": {
+        },
+        "vegetables": {
+        },
+        "dairy": {
+        },
+        "condiments": {
+        }
+    }
+}
