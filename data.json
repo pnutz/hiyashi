@@ -10,6 +10,7 @@
         "noodles": {
             "ramen_noodles": {
                 "label": "Chilled Ramen Noodles",
+                "required": true,
                 "ingredients": {
                     "ramen_noodles": {
                         "label": "Ramen Noodles",
@@ -33,7 +34,10 @@
         "sauces": {
             "soy_dressing": {
                 "label": "Soy Sauce Dressing",
-                "ingredient_category": "Soy Sauce Dressing Ingredients",
+                "ingredient_category": {
+                    "category": "soy_sauce",
+                    "label": "Soy Sauce Dressing Ingredients"
+                },
                 "ingredients": {
                     "soy_sauce": {
                         "label": "Soy Sauce",
@@ -98,7 +102,10 @@
             },
             "sesame_dressing": {
                 "label": "Sesame Dressing",
-                "ingredient_category": "Sesame Dressing Ingredients",
+                "ingredient_category": {
+                    "category": "sesame_dressing",
+                    "label": "Sesame Dressing Ingredients"
+                },
                 "ingredients": {
                     "chicken_stock": {
                         "label": "Chinese Chicken Stock",

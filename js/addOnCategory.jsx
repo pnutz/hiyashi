@@ -5,7 +5,7 @@ let app = app || {};
     
     let AddOn = app.AddOn;
     
-    class AddOnCategory extends React.Component {    
+    class AddOnCategory extends React.PureComponent {    
         render() {
             let category = this.props.category;
             

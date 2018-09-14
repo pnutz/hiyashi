@@ -22,6 +22,12 @@ let app = app || {};
     let AddOn = app.AddOn;
     
     class Hiyashi extends React.Component {
+        constructor(props) {
+            super(props);
+            
+            this.handleAddOnChange = this.handleAddOnChange.bind(this);
+        }
+        
         render() {
             let model = this.props.model;
             console.log(model);
@@ -35,7 +41,16 @@ let app = app || {};
                     categoryAddOns.forEach(function (addOn) {
                         let addOnData = categoryData[addOn];
                         let selection = model.getAddOnSelection(category, addOn);
-                        addOns.push(<AddOn addon={ addOn } label={addOnData.label} state={selection} />);
+                        addOns.push(
+                            <AddOn
+                                key={addOn}
+                                category={category}
+                                addon={addOn}
+                                label={addOnData.label}
+                                required={addOnData.required}
+                                onAddOnChange={this.handleAddOnChange}
+                                value={selection} />
+                        );
                     }, this);
                     
                     categories.push(
@@ -45,6 +60,14 @@ let app = app || {};
                     );
                 }
             }, this);
+            
+            /**
+                TODO:
+                - servings modification
+                - ingredients list, separated by ingredient_category (no category first) -- ul/li, click to strikethrough
+                - recipe time
+                - recipe steps
+            */
 
             return (
                 <div>
@@ -53,6 +76,11 @@ let app = app || {};
                     { categories }
                 </div>
             );
+        }
+        
+        handleAddOnChange(category, addon, value) {
+            let model = this.props.model;
+            model.applyAddOn(category, addon, value);
         }
     }
     
