@@ -6,6 +6,11 @@
         "minutes": "min",
         "cups": "cups"
     },
+    "ingredient_categories": {
+        "default": "Ingredients",
+        "soy_sauce": "Soy Sauce Dressing Ingredients",
+        "sesame_dressing": "Sesame Dressing Ingredients"
+    },
     "categories": {
         "noodles": {
             "ramen_noodles": {
@@ -34,10 +39,7 @@
         "sauces": {
             "soy_dressing": {
                 "label": "Soy Sauce Dressing",
-                "ingredient_category": {
-                    "category": "soy_sauce",
-                    "label": "Soy Sauce Dressing Ingredients"
-                },
+                "ingredient_category": "soy_sauce",
                 "ingredients": {
                     "soy_sauce": {
                         "label": "Soy Sauce",
@@ -102,10 +104,7 @@
             },
             "sesame_dressing": {
                 "label": "Sesame Dressing",
-                "ingredient_category": {
-                    "category": "sesame_dressing",
-                    "label": "Sesame Dressing Ingredients"
-                },
+                "ingredient_category": "sesame_dressing",
                 "ingredients": {
                     "chicken_stock": {
                         "label": "Chinese Chicken Stock",

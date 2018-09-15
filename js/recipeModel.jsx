@@ -7,6 +7,7 @@ var app = app || {};
 
 	app.RecipeModel = function (data) {
         this.units = data.units;
+        this.ingredientCategories = data.ingredient_categories;
         this.categories = data.categories;
         this.selection = {
             addOns: {},
@@ -15,9 +16,9 @@ var app = app || {};
             servings: 1
         };
         
-        // apply ingredients, etc. based on defaultSelection
-        
         this.callbacks = [];
+        
+        this.initializeSelection();
 	};
     
     app.RecipeModel.prototype.subscribe = function (callback) {
@@ -42,21 +43,49 @@ var app = app || {};
         return this.categories[category];
     };
     
+    app.RecipeModel.prototype.getIngredients = function () {
+        return this.selection.ingredients;
+    };
+    
+    app.RecipeModel.prototype.getIngredientCategory = function (category) {
+        return this.selection.ingredients[category];
+    };
+    
     app.RecipeModel.prototype.getAddOn = function (category, addOn) {
         category = this.getCategory(category);
         return (category) ? category[addOn] : null;
     };
     
+    app.RecipeModel.prototype.getIngredientCategoryLabel = function (category) {
+        return this.ingredientCategories[category];
+    };
+    
     app.RecipeModel.prototype.getAddOnSelection = function (category, addOn) {
-        let defaultSelection = (this.getAddOn(category, addOn).required) ? 1 : 0;
-        return (this.selection.addOns[category]) ? (this.selection.addOns[category][addOn] || defaultSelection) : defaultSelection;
+        return (this.selection.addOns[category]) ? (this.selection.addOns[category][addOn] || 0) : 0;
+    };
+    
+    app.RecipeModel.prototype.initializeSelection = function () {
+        // initialize selection of required addOns
+        Object.keys(this.getCategories()).forEach(function (category) {
+            let categoryData = this.getCategory(category);
+            let categoryAddOns = Object.keys(categoryData);
+            if (categoryAddOns.length > 0) {
+                let addOns = [];
+                categoryAddOns.forEach(function (addOn) {
+                    let defaultSelection = (this.getAddOn(category, addOn).required) ? 1 : 0;
+                    if (defaultSelection > 0) {
+                        this.applyAddOn(category, addOn, defaultSelection);
+                    }
+                }, this);
+            }
+        }, this);
     };
     
     app.RecipeModel.prototype.applyAddOn = function (category, addOn, value) {
         let hasCategory = this.selection.addOns.hasOwnProperty(category);
         let oldValue = this.getAddOnSelection(category, addOn);
         
-        // change ingredients
+        // change in ingredients
         let netValue = value - oldValue;
         if (netValue > 0) {
             this.addIngredients(category, addOn, netValue);
@@ -82,8 +111,6 @@ var app = app || {};
         /**
         - nice to have: metric
         - servings
-        - addon
-        - ingredient
         - recipe
         - time
         */
@@ -122,22 +149,21 @@ var app = app || {};
         if (addOn) {
             value *= this.getServings();
             
-            let ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : null;
-            let categoryValue = (ingredientCategory) ? ingredientCategory.category : 'default';
+            let ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : 'default';
             Object.keys(addOn.ingredients).forEach(function (ingredient) {
                 let addedQuantity = value * addOn.ingredients[ingredient].serving.quantity;
 
-                if (!this.selection.ingredients.hasOwnProperty(categoryValue)) {
-                    this.selection.ingredients[categoryValue] = {};
+                if (!this.selection.ingredients.hasOwnProperty(ingredientCategory)) {
+                    this.selection.ingredients[ingredientCategory] = {};
                 }
                 
                 let newQuantity = addedQuantity;
-                if (!this.selection.ingredients[categoryValue].hasOwnProperty(ingredient)) {
-                    this.selection.ingredients[categoryValue][ingredient] = app.Utils.deepClone(addOn.ingredients[ingredient]);
+                if (!this.selection.ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
+                    this.selection.ingredients[ingredientCategory][ingredient] = app.Utils.deepClone(addOn.ingredients[ingredient]);
                 } else {
-                    newQuantity += this.selection.ingredients[categoryValue][ingredient].serving.quantity;
+                    newQuantity += this.selection.ingredients[ingredientCategory][ingredient].serving.quantity;
                 }
-                this.selection.ingredients[categoryValue][ingredient].serving.quantity = newQuantity;
+                this.selection.ingredients[ingredientCategory][ingredient].serving.quantity = newQuantity;
             }, this);
         }
     };
@@ -148,36 +174,34 @@ var app = app || {};
         if (addOn) {
             value *= this.getServings();
             
-            let ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : null;
-            let categoryValue = (ingredientCategory) ? ingredientCategory.category : 'default';
+            let ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : 'default';
             Object.keys(addOn.ingredients).forEach(function (ingredient) {
                 let removedQuantity = value * addOn.ingredients[ingredient].serving.quantity;
                 
-                if (!this.selection.ingredients.hasOwnProperty(categoryValue) ||
-                        !this.selection.ingredients[categoryValue].hasOwnProperty(ingredient)) {
+                if (!this.selection.ingredients.hasOwnProperty(ingredientCategory) ||
+                        !this.selection.ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
                     return;
                 }
                 
-                let currentQuantity = this.selection.ingredients[categoryValue][ingredient].serving.quantity;
+                let currentQuantity = this.selection.ingredients[ingredientCategory][ingredient].serving.quantity;
                 let newQuantity = currentQuantity - removedQuantity;
                 if (newQuantity <= 0) {
-                    delete this.selection.ingredients[categoryValue][ingredient];
+                    delete this.selection.ingredients[ingredientCategory][ingredient];
                 } else {
-                    this.selection.ingredients[categoryValue][ingredient].serving.quantity = newQuantity;
+                    this.selection.ingredients[ingredientCategory][ingredient].serving.quantity = newQuantity;
                 }
                 
-                if (Object.keys(this.selection.ingredients[categoryValue]).length === 0) {
-                    delete this.selection.ingredients[categoryValue];
+                if (Object.keys(this.selection.ingredients[ingredientCategory]).length === 0) {
+                    delete this.selection.ingredients[ingredientCategory];
                 }
             }, this);
         }
     };
     
-    app.RecipeModel.prototype.getIngredients = function () {
-        // compile all like ingredients by ingredient_category and key
-    };
-    
     // NOTE: some recipe items will refer to value of ingredient since summation of ingredients will mess up count
     app.RecipeModel.prototype.addRecipeStep = function () {
+    };
+    
+    app.RecipeModel.prototype.removeRecipeStep = function () {
     };
 })();

@@ -20,6 +20,8 @@ let app = app || {};
         
     let AddOnCategory = app.AddOnCategory;
     let AddOn = app.AddOn;
+    let IngredientList = app.IngredientList;
+    let Ingredient = app.Ingredient;
     
     class Hiyashi extends React.Component {
         constructor(props) {
@@ -43,7 +45,6 @@ let app = app || {};
                         let selection = model.getAddOnSelection(category, addOn);
                         addOns.push(
                             <AddOn
-                                key={addOn}
                                 category={category}
                                 addon={addOn}
                                 label={addOnData.label}
@@ -61,6 +62,34 @@ let app = app || {};
                 }
             }, this);
             
+            let ingredients = [];
+            Object.keys(model.getIngredients()).forEach(function (ingredientCategory) {
+                let categoryData = model.getIngredientCategory(ingredientCategory);
+                let categoryIngredients = Object.keys(categoryData);
+                if (categoryIngredients.length > 0) {
+                    let ingredientList = [];
+                    categoryIngredients.forEach(function (ingredient) {
+                        let ingredientData = categoryData[ingredient];
+                        ingredientList.push(
+                            <Ingredient
+                                key={ingredient}
+                                category={ingredientCategory}
+                                ingredient={ingredient}
+                                label={ingredientData.label}
+                                quantity={ingredientData.serving.quantity}
+                                unit={ingredientData.serving.unit}
+                            />
+                        );
+                    }, this);
+                    
+                    ingredients.push(
+                        <IngredientList category={ model.getIngredientCategoryLabel(ingredientCategory) }>
+                            { ingredientList }
+                        </IngredientList>
+                    );
+                }
+            }, this);
+            
             /**
                 TODO:
                 - servings modification
@@ -74,6 +103,7 @@ let app = app || {};
                     <h1>Hiyashi Chuka!</h1>
                     <p>For the love of cold ramen :)</p>
                     { categories }
+                    { ingredients }
                 </div>
             );
         }
