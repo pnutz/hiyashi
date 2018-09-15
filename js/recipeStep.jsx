@@ -3,7 +3,7 @@ let app = app || {};
 (function() {
     'use strict';
     
-    class Ingredient extends React.PureComponent { 
+    class RecipeStep extends React.PureComponent { 
         constructor(props) {
             super(props);
             
@@ -15,7 +15,7 @@ let app = app || {};
         }
         
         render() {
-            let className = 'ingredient';
+            let className = 'recipe-step';
             
             if (!this.state.active) {
                 // text-decoration: line-through;
@@ -26,7 +26,7 @@ let app = app || {};
                 <li
                     className={className}
                     onClick={this.handleClick}>
-                    { this.props.label } { this.props.quantity } { this.props.unit }
+                    { this.props.content }
                 </li>
             );
         }
@@ -46,5 +46,5 @@ let app = app || {};
         }
     }
     
-    app.Ingredient = Ingredient;
+    app.RecipeStep = RecipeStep;
 })();

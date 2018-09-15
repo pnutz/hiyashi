@@ -21,6 +21,7 @@ var app = app || {};
         this.initializeSelection();
 	};
     
+    // RecipeModel runs subscribed callback methods on any model changes
     app.RecipeModel.prototype.subscribe = function (callback) {
         this.callbacks.push(callback);
     };
@@ -64,8 +65,8 @@ var app = app || {};
         return (this.selection.addOns[category]) ? (this.selection.addOns[category][addOn] || 0) : 0;
     };
     
+    // initialize selection of required addOns
     app.RecipeModel.prototype.initializeSelection = function () {
-        // initialize selection of required addOns
         Object.keys(this.getCategories()).forEach(function (category) {
             let categoryData = this.getCategory(category);
             let categoryAddOns = Object.keys(categoryData);
@@ -85,7 +86,7 @@ var app = app || {};
         let hasCategory = this.selection.addOns.hasOwnProperty(category);
         let oldValue = this.getAddOnSelection(category, addOn);
         
-        // change in ingredients
+        // apply change in ingredients
         let netValue = value - oldValue;
         if (netValue > 0) {
             this.addIngredients(category, addOn, netValue);
@@ -96,37 +97,25 @@ var app = app || {};
         // change addOns
         if (value === 0 && hasCategory) {
             delete this.selection.addOns[category][addOn];
-            
-            // remove recipe
         } else {
             if (!hasCategory) {
                 this.selection.addOns[category] = {};
             }
             
             this.selection.addOns[category][addOn] = value;
-            
-            // add recipe
         }
+        
+        // apply change in recipe
+        this.adjustRecipeSteps(category, addOn, value);
         
         /**
         - nice to have: metric
         - servings
-        - recipe
         - time
         */
         
-        // selection holds quantities
-        // method to get ingredients, can either get ingredients every time or store (will call render every time regardless)
-        // this.ingredients.default
-        // this.ingredients['soy_sauce']
-        // array - label is stored where?
-
-        //this.categories[category][addOn].ingredients && ingredient_category
         //this.categories[category][addOn].time (prep / cook)
-        //this.categories[category][addOn].recipe
-        
-        // add/remove recipe steps
-        
+                
         // TODO: render ingredients by alphabetical
         
         this.callback();
@@ -149,21 +138,23 @@ var app = app || {};
         if (addOn) {
             value *= this.getServings();
             
+            let ingredients = this.selection.ingredients;
             let ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : 'default';
             Object.keys(addOn.ingredients).forEach(function (ingredient) {
                 let addedQuantity = value * addOn.ingredients[ingredient].serving.quantity;
 
-                if (!this.selection.ingredients.hasOwnProperty(ingredientCategory)) {
-                    this.selection.ingredients[ingredientCategory] = {};
+                if (!ingredients.hasOwnProperty(ingredientCategory)) {
+                    ingredients[ingredientCategory] = {};
                 }
                 
                 let newQuantity = addedQuantity;
-                if (!this.selection.ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
-                    this.selection.ingredients[ingredientCategory][ingredient] = app.Utils.deepClone(addOn.ingredients[ingredient]);
+                if (!ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
+                    ingredients[ingredientCategory][ingredient] = app.Utils.deepClone(addOn.ingredients[ingredient]);
+                    ingredients[ingredientCategory][ingredient].serving.unit = this.getUnitAbbr(ingredients[ingredientCategory][ingredient].serving.unit);
                 } else {
-                    newQuantity += this.selection.ingredients[ingredientCategory][ingredient].serving.quantity;
+                    newQuantity += ingredients[ingredientCategory][ingredient].serving.quantity;
                 }
-                this.selection.ingredients[ingredientCategory][ingredient].serving.quantity = newQuantity;
+                ingredients[ingredientCategory][ingredient].serving.quantity = newQuantity;
             }, this);
         }
     };
@@ -174,34 +165,104 @@ var app = app || {};
         if (addOn) {
             value *= this.getServings();
             
+            let ingredients = this.selection.ingredients;
             let ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : 'default';
             Object.keys(addOn.ingredients).forEach(function (ingredient) {
                 let removedQuantity = value * addOn.ingredients[ingredient].serving.quantity;
                 
-                if (!this.selection.ingredients.hasOwnProperty(ingredientCategory) ||
-                        !this.selection.ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
+                if (!ingredients.hasOwnProperty(ingredientCategory) ||
+                        !ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
                     return;
                 }
                 
-                let currentQuantity = this.selection.ingredients[ingredientCategory][ingredient].serving.quantity;
+                let currentQuantity = ingredients[ingredientCategory][ingredient].serving.quantity;
                 let newQuantity = currentQuantity - removedQuantity;
                 if (newQuantity <= 0) {
-                    delete this.selection.ingredients[ingredientCategory][ingredient];
+                    delete ingredients[ingredientCategory][ingredient];
                 } else {
-                    this.selection.ingredients[ingredientCategory][ingredient].serving.quantity = newQuantity;
+                    ingredients[ingredientCategory][ingredient].serving.quantity = newQuantity;
                 }
                 
-                if (Object.keys(this.selection.ingredients[ingredientCategory]).length === 0) {
-                    delete this.selection.ingredients[ingredientCategory];
+                if (Object.keys(ingredients[ingredientCategory]).length === 0) {
+                    delete ingredients[ingredientCategory];
                 }
             }, this);
         }
     };
     
-    // NOTE: some recipe items will refer to value of ingredient since summation of ingredients will mess up count
-    app.RecipeModel.prototype.addRecipeStep = function () {
+    app.RecipeModel.prototype.getAddOnIngredients = function (category, addOn, value) {
+        addOn = this.getAddOn(category, addOn);
+        value *= this.getServings();
+        
+        let ingredients = {};
+        Object.keys(addOn.ingredients).forEach(function (ingredient) {
+            ingredients[ingredient] = {
+                label: addOn.ingredients[ingredient].label,
+                quantity: value * addOn.ingredients[ingredient].serving.quantity,
+                unit: addOn.ingredients[ingredient].serving.unit
+            };
+        }, this);
+        
+        return ingredients;
+    };
+
+    app.RecipeModel.prototype.adjustRecipeSteps = function (category, addOn, value) {
+        let recipe = this.selection.recipe;
+        if (value === 0) {
+            // remove recipe steps
+            if (recipe.hasOwnProperty(category)) {
+                if (recipe[category].hasOwnProperty(addOn)) {
+                    delete recipe[category][addOn];
+                }
+                
+                if (Object.keys(recipe[category]).length === 0) {
+                    delete recipe[category];
+                }
+            }
+        } else {
+            // add/edit recipe steps (possibly just ingredients)
+            if (!recipe.hasOwnProperty(category)) {
+                recipe[category] = {};
+            }
+            
+            let ingredients = this.getAddOnIngredients(category, addOn, value);
+            let addOnData = this.getAddOn(category, addOn);
+            
+            recipe[category][addOn] = {
+                steps: app.Utils.deepClone(addOnData.recipe),
+                ingredients: ingredients
+            };
+        }
     };
     
-    app.RecipeModel.prototype.removeRecipeStep = function () {
+    app.RecipeModel.prototype.getRecipeSteps = function () {
+        let recipeSteps = [];
+        
+        let recipe = this.selection.recipe;
+        Object.keys(recipe).forEach(function (category) {
+            Object.keys(recipe[category]).forEach(function (addOn) {
+                addOn = recipe[category][addOn];
+                addOn.steps.forEach(function (step) {
+                    // replace all ingredient keys enclosed in {{ }} with ingredient values
+                    let ingredientMatch = step.match(/{{.*?}}/g);
+                    if (ingredientMatch) {
+                        ingredientMatch.forEach(function (ingredientMatch) {
+                            let stringLength = ingredientMatch.length;
+                            let ingredientKey = ingredientMatch.substring(2, stringLength - 2);
+                            let ingredientContents = this.getIngredientString(addOn.ingredients[ingredientKey]);
+                            step = step.replace(ingredientMatch, ingredientContents);
+                        }, this);
+                    }
+                    recipeSteps.push(step);
+                }, this);
+            }, this);
+        }, this);
+        
+        return recipeSteps;
+    };
+    
+    // expects ingredient object as stored in recipe addOn selection
+    app.RecipeModel.prototype.getIngredientString = function(ingredient) {
+        return ingredient.quantity + ' ' + ingredient.unit + ' of ' + ingredient.label;
     };
 })();

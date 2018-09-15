@@ -22,6 +22,8 @@ let app = app || {};
     let AddOn = app.AddOn;
     let IngredientList = app.IngredientList;
     let Ingredient = app.Ingredient;
+    let Recipe = app.Recipe;
+    let RecipeStep = app.RecipeStep;
     
     class Hiyashi extends React.Component {
         constructor(props) {
@@ -90,12 +92,22 @@ let app = app || {};
                 }
             }, this);
             
+            let recipeSteps = [];
+            model.getRecipeSteps().forEach(function (recipeStep) {
+                recipeSteps.push(
+                    <RecipeStep
+                        key={recipeStep}
+                        content={recipeStep}
+                    />
+                );
+            }, this);
+            let recipe = <Recipe>{ recipeSteps }</Recipe>;
+            
             /**
                 TODO:
                 - servings modification
-                - ingredients list, separated by ingredient_category (no category first) -- ul/li, click to strikethrough
                 - recipe time
-                - recipe steps
+                - nice to have: recipe presets from recipe compilation
             */
 
             return (
@@ -104,6 +116,7 @@ let app = app || {};
                     <p>For the love of cold ramen :)</p>
                     { categories }
                     { ingredients }
+                    { recipe }
                 </div>
             );
         }

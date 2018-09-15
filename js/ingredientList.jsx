@@ -3,8 +3,6 @@ let app = app || {};
 (function() {
     'use strict';
     
-    let Ingredient = app.Ingredient;
-    
     class IngredientList extends React.PureComponent {
         render() {
             let category = this.props.category;

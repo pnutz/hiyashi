@@ -3,8 +3,6 @@ let app = app || {};
 (function() {
     'use strict';
     
-    let AddOn = app.AddOn;
-    
     class AddOnCategory extends React.PureComponent {    
         render() {
             let category = this.props.category;
