@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 
+import './AddOn.css';
+
 class AddOn extends PureComponent { 
     constructor(props) {
         super(props);
@@ -8,24 +10,24 @@ class AddOn extends PureComponent {
     }
     
     render() {
-        /* TODO: styles
-        * color based on data-value (selected add-on vs add-on)
-        * hover opacity and display next value / hide actual value
-        * content: attr(data-value); OR data-next
-        *
-        * icon if this.props.required?
+        /* icon if this.props.required?
         *
         * TODO: functionality (custom input)
         * icon to toggle input to set custom amount
         */
         
+        let icon = '/icons/' + this.props.icon;
+        
         return (
-            <div
-                className="add-on"
-                data-value={this.props.value}
-                data-next-value={this.getNextValue(this.props.value, this.props.required)}
-                onClick={this.handleClick}>
-                { this.props.label } { this.props.value /*TODO: remove rendered value after style */ }
+            <div className="add-on-container">
+                <div
+                    className="add-on"
+                    data-value={this.props.value}
+                    data-next-value={this.getNextValue(this.props.value, this.props.required)}
+                    onClick={this.handleClick}>
+                    <img className="icon" src={icon} alt=""></img>
+                </div>
+                <div className="add-on-label">{ this.props.label }</div>
             </div>
         );
     }

@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 
+import './List.css';
+
 class Ingredient extends PureComponent { 
     constructor(props) {
         super(props);
@@ -15,7 +17,6 @@ class Ingredient extends PureComponent {
         let className = 'ingredient';
         
         if (!this.state.active) {
-            // text-decoration: line-through;
             className += ' inactive';
         }
     

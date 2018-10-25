@@ -35,6 +35,7 @@ class Hiyashi extends Component {
                             addon={addOn}
                             label={addOnData.label}
                             required={addOnData.required}
+                            icon={addOnData.icon}
                             onAddOnChange={this.handleAddOnChange}
                             value={selection} />
                     );
@@ -97,9 +98,10 @@ class Hiyashi extends Component {
         */
 
         return (
-            <div>
+            <div className="hiyashi">
                 <h1>Hiyashi Chuka!</h1>
                 <p>For the love of cold ramen :)</p>
+                <p>Get started by selecting the contents of your hiyashi chuka!</p>
                 { categories }
                 { ingredients }
                 { recipe }
