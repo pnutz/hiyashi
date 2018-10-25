@@ -1,20 +1,18 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react'
 
-import Utils from './Utils';
+import {capitalize} from './Utils'
 
 class AddOnCategory extends PureComponent {
     render() {
-        let category = this.props.category;
-        
         return (
             <div className="category">
-                <h2 className="label">{ Utils.capitalize(category) }</h2>
+                <h2 className="label">{capitalize(this.props.category)}</h2>
                 <div>
-                    { this.props.children }
+                    {this.props.children}
                 </div>
             </div>
-        );
+        )
     }
 }
 
-export default AddOnCategory;
+export default AddOnCategory

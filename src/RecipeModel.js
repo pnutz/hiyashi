@@ -1,112 +1,102 @@
-import Utils from './Utils';
+import {deepClone} from './Utils'
 
 class RecipeModel {
     constructor(data) {
-        this.units = data.units;
-        this.ingredientCategories = data.ingredient_categories;
-        this.categories = data.categories;
+        this.units = data.units
+        this.ingredientCategories = data.ingredient_categories
+        this.categories = data.categories
         this.selection = {
             addOns: {},
             ingredients: {},
             recipe: {},
             servings: 1
-        };
+        }
         
-        this.callbacks = [];
+        this.callbacks = []
         
-        this.initializeSelection();
+        this.initializeSelection()
     }
     
     // RecipeModel runs subscribed callback methods on any model changes
     subscribe(callback) {
-        this.callbacks.push(callback);
+        this.callbacks.push(callback)
     }
     
     callback() {
         this.callbacks.forEach(function (callback) {
-            callback();
-        });
+            callback()
+        })
     }
     
     getUnitAbbr(unit) {
-        return this.units[unit];
+        return this.units[unit]
     }
     
     getCategories() {
-        return this.categories;
-    }
-    
-    getCategory(category) {
-        return this.categories[category];
+        return this.categories
     }
     
     getIngredients() {
-        return this.selection.ingredients;
-    }
-    
-    getIngredientCategory(category) {
-        return this.selection.ingredients[category];
+        return this.selection.ingredients
     }
     
     // expects ingredient object as stored in recipe addOn selection
     getIngredientString(ingredient) {
-        return ingredient.quantity + ' ' + ingredient.unit + ' of ' + ingredient.label;
+        return ingredient.quantity + ' ' + ingredient.unit + ' of ' + ingredient.label
     }
     
     getAddOn(category, addOn) {
-        category = this.getCategory(category);
-        return (category) ? category[addOn] : null;
+        category = this.categories[category]
+        return (category) ? category[addOn] : null
     }
     
     getIngredientCategoryLabel(category) {
-        return this.ingredientCategories[category];
+        return this.ingredientCategories[category]
     }
     
     getAddOnSelection(category, addOn) {
-        return (this.selection.addOns[category]) ? (this.selection.addOns[category][addOn] || 0) : 0;
+        return (this.selection.addOns[category]) ? (this.selection.addOns[category][addOn] || 0) : 0
     }
     
     // initialize selection of required addOns
     initializeSelection() {
-        Object.keys(this.getCategories()).forEach(function (category) {
-            let categoryData = this.getCategory(category);
-            let categoryAddOns = Object.keys(categoryData);
-            if (categoryAddOns.length > 0) {
-                categoryAddOns.forEach(function (addOn) {
-                    let defaultSelection = (this.getAddOn(category, addOn).required) ? 1 : 0;
-                    if (defaultSelection > 0) {
-                        this.applyAddOn(category, addOn, defaultSelection);
-                    }
-                }, this);
+        const categories = this.getCategories();
+        for (const category in categories) {
+            const categoryData = this.categories[category]
+            for (const addOn in categoryData) {
+                const defaultSelection = (this.getAddOn(category, addOn).required) ? 1 : 0
+                if (defaultSelection > 0) {
+                    this.applyAddOn(category, addOn, defaultSelection)
+                }
             }
-        }, this);
+        }
     }
     
     applyAddOn(category, addOn, value) {
-        let hasCategory = this.selection.addOns.hasOwnProperty(category);
-        let oldValue = this.getAddOnSelection(category, addOn);
+        const hasCategory = this.selection.addOns.hasOwnProperty(category)
+        const oldValue = this.getAddOnSelection(category, addOn)
         
         // apply change in ingredients
-        let netValue = value - oldValue;
+        const netValue = value - oldValue
         if (netValue > 0) {
-            this.addIngredients(category, addOn, netValue);
+            this.addIngredients(category, addOn, netValue)
         } else {
-            this.removeIngredients(category, addOn, netValue * -1);
+            this.removeIngredients(category, addOn, netValue * -1)
         }
         
         // change addOns
         if (value === 0 && hasCategory) {
-            delete this.selection.addOns[category][addOn];
+            delete this.selection.addOns[category][addOn]
         } else {
             if (!hasCategory) {
-                this.selection.addOns[category] = {};
+                this.selection.addOns[category] = {}
             }
             
-            this.selection.addOns[category][addOn] = value;
+            this.selection.addOns[category][addOn] = value
         }
         
         // apply change in recipe
-        this.adjustRecipeSteps(category, addOn, value);
+        this.adjustRecipeSteps(category, addOn, value)
         
         /**
         - nice to have: metric
@@ -118,148 +108,148 @@ class RecipeModel {
                 
         // TODO: render ingredients by alphabetical
         
-        this.callback();
+        this.callback()
     }
     
     applyServings(servings) {
-        this.selection.servings = servings;
+        this.selection.servings = servings
         // TODO: add or remove ingredients
         
-        this.callback();
+        this.callback()
     }
     
     getServings() {
-        return this.selection.servings;
+        return this.selection.servings
     }
     
     addIngredients(category, addOn, value) {
-        addOn = this.getAddOn(category, addOn);
+        addOn = this.getAddOn(category, addOn)
         
         if (addOn) {
-            value *= this.getServings();
+            value *= this.getServings()
             
-            let ingredients = this.selection.ingredients;
-            let ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : 'default';
-            Object.keys(addOn.ingredients).forEach(function (ingredient) {
-                let addedQuantity = value * addOn.ingredients[ingredient].serving.quantity;
+            const ingredients = this.selection.ingredients
+            const ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : 'default'
+            for (const ingredient in addOn.ingredients) {
+                const addedQuantity = value * addOn.ingredients[ingredient].serving.quantity
 
                 if (!ingredients.hasOwnProperty(ingredientCategory)) {
-                    ingredients[ingredientCategory] = {};
+                    ingredients[ingredientCategory] = {}
                 }
                 
-                let newQuantity = addedQuantity;
+                let newQuantity = addedQuantity
                 if (!ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
-                    ingredients[ingredientCategory][ingredient] = Utils.deepClone(addOn.ingredients[ingredient]);
-                    ingredients[ingredientCategory][ingredient].serving.unit = this.getUnitAbbr(ingredients[ingredientCategory][ingredient].serving.unit);
+                    ingredients[ingredientCategory][ingredient] = deepClone(addOn.ingredients[ingredient])
+                    ingredients[ingredientCategory][ingredient].serving.unit = this.getUnitAbbr(ingredients[ingredientCategory][ingredient].serving.unit)
                 } else {
-                    newQuantity += ingredients[ingredientCategory][ingredient].serving.quantity;
+                    newQuantity += ingredients[ingredientCategory][ingredient].serving.quantity
                 }
-                ingredients[ingredientCategory][ingredient].serving.quantity = newQuantity;
-            }, this);
+                ingredients[ingredientCategory][ingredient].serving.quantity = newQuantity
+            }
         }
     }
     
     removeIngredients(category, addOn, value) {
-        addOn = this.getAddOn(category, addOn);
+        addOn = this.getAddOn(category, addOn)
         
         if (addOn) {
-            value *= this.getServings();
+            value *= this.getServings()
             
-            let ingredients = this.selection.ingredients;
-            let ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : 'default';
-            Object.keys(addOn.ingredients).forEach(function (ingredient) {
-                let removedQuantity = value * addOn.ingredients[ingredient].serving.quantity;
+            const ingredients = this.selection.ingredients
+            const ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : 'default'
+            for (const ingredient in addOn.ingredients) {
+                const removedQuantity = value * addOn.ingredients[ingredient].serving.quantity
                 
                 if (!ingredients.hasOwnProperty(ingredientCategory) ||
                         !ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
-                    return;
+                    return
                 }
                 
-                let currentQuantity = ingredients[ingredientCategory][ingredient].serving.quantity;
-                let newQuantity = currentQuantity - removedQuantity;
+                const currentQuantity = ingredients[ingredientCategory][ingredient].serving.quantity
+                const newQuantity = currentQuantity - removedQuantity
                 if (newQuantity <= 0) {
-                    delete ingredients[ingredientCategory][ingredient];
+                    delete ingredients[ingredientCategory][ingredient]
                 } else {
-                    ingredients[ingredientCategory][ingredient].serving.quantity = newQuantity;
+                    ingredients[ingredientCategory][ingredient].serving.quantity = newQuantity
                 }
                 
                 if (Object.keys(ingredients[ingredientCategory]).length === 0) {
-                    delete ingredients[ingredientCategory];
+                    delete ingredients[ingredientCategory]
                 }
-            }, this);
+            }
         }
     }
     
     getAddOnIngredients(category, addOn, value) {
-        addOn = this.getAddOn(category, addOn);
-        value *= this.getServings();
+        addOn = this.getAddOn(category, addOn)
+        value *= this.getServings()
         
-        let ingredients = {};
-        Object.keys(addOn.ingredients).forEach(function (ingredient) {
+        const ingredients = {}
+        for (const ingredient in addOn.ingredients) {
             ingredients[ingredient] = {
                 label: addOn.ingredients[ingredient].label,
                 quantity: value * addOn.ingredients[ingredient].serving.quantity,
                 unit: addOn.ingredients[ingredient].serving.unit
-            };
-        }, this);
+            }
+        }
         
-        return ingredients;
+        return ingredients
     }
     
     adjustRecipeSteps(category, addOn, value) {
-        let recipe = this.selection.recipe;
+        const recipe = this.selection.recipe
         if (value === 0) {
             // remove recipe steps
             if (recipe.hasOwnProperty(category)) {
                 if (recipe[category].hasOwnProperty(addOn)) {
-                    delete recipe[category][addOn];
+                    delete recipe[category][addOn]
                 }
                 
                 if (Object.keys(recipe[category]).length === 0) {
-                    delete recipe[category];
+                    delete recipe[category]
                 }
             }
         } else {
             // add/edit recipe steps (possibly just ingredients)
             if (!recipe.hasOwnProperty(category)) {
-                recipe[category] = {};
+                recipe[category] = {}
             }
             
-            let ingredients = this.getAddOnIngredients(category, addOn, value);
-            let addOnData = this.getAddOn(category, addOn);
+            const ingredients = this.getAddOnIngredients(category, addOn, value)
+            const addOnData = this.getAddOn(category, addOn)
             
             recipe[category][addOn] = {
-                steps: Utils.deepClone(addOnData.recipe),
+                steps: deepClone(addOnData.recipe),
                 ingredients: ingredients
-            };
+            }
         }
     }
     
     getRecipeSteps() {
-        let recipeSteps = [];
+        const recipeSteps = []
         
-        let recipe = this.selection.recipe;
-        Object.keys(recipe).forEach(function (category) {
-            Object.keys(recipe[category]).forEach(function (addOn) {
-                addOn = recipe[category][addOn];
-                addOn.steps.forEach(function (step) {
+        const recipe = this.selection.recipe
+        for (const category in recipe) {
+            for (let addOn in recipe[category]) {
+                addOn = recipe[category][addOn]
+                for (let step in addOn.steps) {
                     // replace all ingredient keys enclosed in {{ }} with ingredient values
-                    let ingredientMatch = step.match(/{{.*?}}/g);
-                    if (ingredientMatch) {
-                        ingredientMatch.forEach(function (ingredientMatch) {
-                            let stringLength = ingredientMatch.length;
-                            let ingredientKey = ingredientMatch.substring(2, stringLength - 2);
-                            let ingredientContents = this.getIngredientString(addOn.ingredients[ingredientKey]);
-                            step = step.replace(ingredientMatch, ingredientContents);
-                        }, this);
+                    const ingredientMatches = step.match(/{{.*?}}/g)
+                    if (ingredientMatches) {
+                        for (const ingredientMatch in ingredientMatches) {
+                            const stringLength = ingredientMatch.length
+                            const ingredientKey = ingredientMatch.substring(2, stringLength - 2)
+                            const ingredientContents = this.getIngredientString(addOn.ingredients[ingredientKey])
+                            step = step.replace(ingredientMatch, ingredientContents)
+                        }
                     }
-                    recipeSteps.push(step);
-                }, this);
-            }, this);
-        }, this);
+                    recipeSteps.push(step)
+                }
+            }
+        }
         
-        return recipeSteps;
+        return recipeSteps
     }
 }
 
-export default RecipeModel;
+export default RecipeModel

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react'
 
 class Recipe extends PureComponent {
     render() {
@@ -6,11 +6,11 @@ class Recipe extends PureComponent {
             <div className="recipe">
                 <h2 className="label">Recipe</h2>
                 <ul className="recipe-steps">
-                    { this.props.children }
+                    {this.props.children}
                 </ul>
             </div>
-        );
+        )
     }
 }
 
-export default Recipe;
+export default Recipe

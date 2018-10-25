@@ -1,47 +1,39 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react'
 
-import './List.css';
+import './List.css'
 
 class RecipeStep extends PureComponent { 
     constructor(props) {
-        super(props);
+        super(props)
         
-        this.state = {
-            active: true
-        };
-        
-        this.handleClick = this.handleClick.bind(this);
+        this.state = { active: true }
     }
     
     render() {
-        let className = 'recipe-step';
+        let className = 'recipe-step'
         
         if (!this.state.active) {
-            className += ' inactive';
+            className += ' inactive'
         }
     
         return (
             <li
                 className={className}
                 onClick={this.handleClick}>
-                { this.props.content }
+                {this.props.content}
             </li>
-        );
+        )
+    }
+    
+    handleClick = () => {
+        this.setState({ active: !this.state.active })
     }
     
     componentDidUpdate(prevProps) {
         if (!this.state.active && this.props !== prevProps) {
-            this.setState({
-                active: true
-            });
+            this.setState({ active: true })
         }
-    }
-    
-    handleClick() {
-        this.setState({
-            active: !this.state.active
-        });
     }
 }
 
-export default RecipeStep;
+export default RecipeStep

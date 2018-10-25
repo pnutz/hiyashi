@@ -1,14 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react'
 
-import './AddOn.css';
+import './AddOn.css'
 
 class AddOn extends PureComponent { 
-    constructor(props) {
-        super(props);
-        
-        this.handleClick = this.handleClick.bind(this);
-    }
-    
     render() {
         /* icon if this.props.required?
         *
@@ -16,50 +10,47 @@ class AddOn extends PureComponent {
         * icon to toggle input to set custom amount
         */
         
-        let icon = '/icons/' + this.props.icon;
+        const icon = '/icons/' + this.props.icon
+        const nextValue = this.getNextValue(this.props.value, this.props.required)
         
         return (
             <div className="add-on-container">
                 <div
                     className="add-on"
                     data-value={this.props.value}
-                    data-next-value={this.getNextValue(this.props.value, this.props.required)}
+                    data-next-value={nextValue}
                     onClick={this.handleClick}>
                     <img className="icon" src={icon} alt=""></img>
                 </div>
-                <div className="add-on-label">{ this.props.label }</div>
+                <div className="add-on-label">{this.props.label}</div>
             </div>
-        );
+        )
     }
     
-    handleClick() {
-        let value = this.getNextValue(this.props.value, this.props.required);
-        this.handleChange(value);
-    }
-    
-    handleChange(value) {
-        this.props.onAddOnChange(this.props.category, this.props.addon, value);
+    handleClick = () => {
+        const nextValue = this.getNextValue(this.props.value, this.props.required)
+        this.props.onAddOnChange(this.props.category, this.props.addon, nextValue)
     }
     
     getNextValue(value, required) {
         switch (value) {
             case 0:
-                value = 1;
-                break;
+                value = 1
+                break
             case 1:
-                value = 0.5;
-                break;
+                value = 0.5
+                break
             case 0.5:
-                value = 2;
-                break;
+                value = 2
+                break
             case 2:
             default:
-                value = (required) ? 1 : 0;
-                break;
+                value = (required) ? 1 : 0
+                break
         }
         
-        return value;
+        return value
     }
 }
 
-export default AddOn;
+export default AddOn
