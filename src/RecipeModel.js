@@ -232,7 +232,7 @@ class RecipeModel {
         for (const category in recipe) {
             for (let addOn in recipe[category]) {
                 addOn = recipe[category][addOn]
-                for (let step in addOn.steps) {
+                for (let step of addOn.steps) {
                     // replace all ingredient keys enclosed in {{ }} with ingredient values
                     const ingredientMatches = step.match(/{{.*?}}/g)
                     if (ingredientMatches) {
