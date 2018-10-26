@@ -4,14 +4,15 @@ import './AddOn.css'
 
 class AddOn extends PureComponent { 
     render() {
-        /* icon if this.props.required?
-        *
+        /*
         * TODO: functionality (custom input)
         * icon to toggle input to set custom amount
         */
         
         const icon = '/icons/' + this.props.icon
         const nextValue = this.getNextValue(this.props.value, this.props.required)
+        
+        const disclaimer = (this.props.required) ? <div className="add-on-disclaimer"><small>*It wouldn't really be cold ramen if we forgot this, would it?</small></div> : '';
         
         return (
             <div className="add-on-container">
@@ -22,7 +23,8 @@ class AddOn extends PureComponent {
                     onClick={this.handleClick}>
                     <img className="icon" src={icon} alt=""></img>
                 </div>
-                <div className="add-on-label">{this.props.label}</div>
+                <div className="add-on-label">{this.props.label}{(this.props.required) ? '*' : ''}</div>
+                {disclaimer}
             </div>
         )
     }

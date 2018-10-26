@@ -17,6 +17,11 @@
     height: 60px;
 }
 
+.add-on-disclaimer {
+    margin-top: 10px;
+    font-size: 0.8em;
+}
+
 .add-on > .icon {
     margin: 20px;
     width: 60px;
