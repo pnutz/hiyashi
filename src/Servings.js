@@ -10,8 +10,8 @@ class Servings extends PureComponent {
                     id="servings-input"
                     className="servings-input"
                     name="servings-input"
-                    type="number"
-                    min="0"
+                    type="text"
+                    maxLength="5"
                     value={this.props.value}
                     onChange={this.handleChange} />
                 <label htmlFor="servings-input" className="label">Servings</label>

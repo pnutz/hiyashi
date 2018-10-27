@@ -16,7 +16,6 @@ class Hiyashi extends Component {
         
         /**
             TODO:
-            - servings modification
             - recipe time
             - nice to have: recipe presets from recipe compilation
         */
@@ -99,7 +98,7 @@ class Hiyashi extends Component {
                         category={ingredientCategory}
                         ingredient={ingredient}
                         label={ingredientData.label}
-                        quantity={ingredientData.serving.quantity}
+                        quantity={ingredientData.serving.formattedQuantity}
                         unit={ingredientData.serving.unit} />
                 )
             }
