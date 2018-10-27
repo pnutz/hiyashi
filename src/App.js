@@ -3,6 +3,7 @@ import './App.css'
 
 import AddOnCategory from './AddOnCategory'
 import AddOn from './AddOn'
+import Servings from './Servings'
 import IngredientList from './IngredientList'
 import Ingredient from './Ingredient'
 import Recipe from './Recipe'
@@ -26,6 +27,7 @@ class Hiyashi extends Component {
                 <p>For the love of cold ramen :)</p>
                 <p>Get started by selecting the contents of your hiyashi chuka!</p>
                 {this.getCategories(model)}
+                {this.getServings(model)}
                 {this.getIngredients(model)}
                 {this.getRecipe(model)}
             </div>
@@ -68,8 +70,19 @@ class Hiyashi extends Component {
         return categories
     }
     
+    getServings(model) {
+        const servings = model.getServings()
+        return <Servings
+                    onServingsChange={this.handleServingsChange}
+                    value={servings} />
+    }
+    
     handleAddOnChange = (category, addon, value) => {
         this.props.model.applyAddOn(category, addon, value)
+    }
+    
+    handleServingsChange = (servings) => {
+        this.props.model.applyServings(servings)
     }
     
     getIngredients(model) {

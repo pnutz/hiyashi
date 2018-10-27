@@ -10,7 +10,7 @@ class Ingredient extends PureComponent {
     }
     
     render() {
-        let className = 'ingredient'
+        let className = 'list-item ingredient'
         
         if (!this.state.active) {
             className += ' inactive'

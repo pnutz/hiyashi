@@ -9,7 +9,7 @@ class RecipeModel {
             addOns: {},
             ingredients: {},
             recipe: {},
-            servings: 1
+            servings: 4
         }
         
         this.callbacks = []
@@ -100,20 +100,20 @@ class RecipeModel {
         
         /**
         - nice to have: metric
-        - servings
         - time
         */
         
         //this.categories[category][addOn].time (prep / cook)
-                
-        // TODO: render ingredients by alphabetical
-        
+
         this.callback()
     }
     
     applyServings(servings) {
+        console.log(servings.match(/(0\.|\.|[1-9]+)(?:\.)?(?:\d+)?/g))
+        // validate number (4 digits max w 1 decimal)
+        // set default if invalid (blank)
         this.selection.servings = servings
-        // TODO: add or remove ingredients
+        // TODO: add or remove ingredients -- pass in existing value to add/removeIngredients based on increase/decrease in servings
         
         this.callback()
     }

@@ -9,6 +9,7 @@
     height: 100px;
     border: 1px solid #000;
     background-color: #FFFDD0;
+    cursor: pointer;
 }
 
 .add-on-label {
@@ -22,6 +23,13 @@
     font-size: 0.8em;
 }
 
+@media only screen and (max-width: 700px) {
+    .add-on-disclaimer {
+        font-size: 0.9em;
+        line-height: 1.1em;
+    }
+}
+
 .add-on > .icon {
     margin: 20px;
     width: 60px;
@@ -29,10 +37,7 @@
 
 .add-on:before,
 .add-on:after {
-    position: absolute;
-    margin: 10px 0 0 10px;
-    width: 80px;
-    height: 80px;
+    position: absolute;    
     text-align: center;
     line-height: 80px;
     display: inline;
@@ -43,12 +48,16 @@
 .add-on:before {
     border-radius: 50%;
     border: solid 5px #000;
+    margin: 10px 0 0 10px;
+    width: 80px;
+    height: 80px;
     content: "";
 }
 
 .add-on:after {
-    margin-top: -30px;
-    margin-left: -130px;
+    display: block;
+    margin-top: -132px;
+    margin-left: 5px;
     content: attr(data-value);
 }
 
@@ -77,9 +86,6 @@
 }
 
 .add-on:hover:after {
-    margin-top: -30px;
-    margin-left: -130px;
-    padding-top: 0px;
     content: attr(data-next-value);
 }
 

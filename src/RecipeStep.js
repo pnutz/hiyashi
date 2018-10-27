@@ -10,7 +10,7 @@ class RecipeStep extends PureComponent {
     }
     
     render() {
-        let className = 'recipe-step'
+        let className = 'list-item recipe-step'
         
         if (!this.state.active) {
             className += ' inactive'
