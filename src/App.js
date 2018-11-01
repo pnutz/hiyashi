@@ -22,7 +22,8 @@ class Hiyashi extends Component {
 
         return (
             <div className="hiyashi">
-                <h1>Hiyashi Chuka!</h1>
+                <h1 className="title">Hiyashi Chuka!</h1>
+                <hr />
                 <p>For the love of cold ramen :)</p>
                 <p>Get started by selecting the contents of your hiyashi chuka!</p>
                 {this.getCategories(model)}
