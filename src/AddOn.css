@@ -98,3 +98,42 @@
 .add-on[data-next-value="0"]:hover:after {
     border: none;
 }
+
+@media (hover:none), (hover:on-demand) {
+    .add-on:hover:before,
+    .add-on:hover:after {
+        color: #000;
+        opacity: 1;
+    }
+    
+    .add-on:hover:before {
+        border: solid 5px #000;
+        background: none;
+    }
+    
+    .add-on[data-value="0"]:hover:before,
+    .add-on[data-value="0"]:hover:after {
+        padding-top: 5px;
+        border: none;
+        content: "";
+    }
+    
+    .add-on[data-value="0.5"]:hover:after {
+        content: "\00bd";
+    }
+
+    .add-on:hover:after {
+        display: block;
+        margin-top: -132px;
+        margin-left: 5px;
+        content: attr(data-value);
+    }
+
+    .add-on[data-next-value="0.5"]:hover:after {
+        content: attr(data-value);
+    }
+
+    .add-on[data-next-value="0"]:hover:before {
+        border: solid 5px #000;
+    }
+}

@@ -60,6 +60,11 @@ footer img.icon {
     margin-right: 10px;
 }
 
+footer img.icon:hover {
+    opacity: 0.5;
+    background-color: #FFFDD0;
+}
+
 @media only screen and (max-width: 700px) {
     footer {
         padding: 0 20px 50px;
@@ -70,4 +75,8 @@ footer img.icon {
 footer .credits {
     margin-top: 10px;
     font-size: 0.8em;
+}
+
+footer .credit {
+    margin: 5px 0;
 }
