@@ -430,6 +430,7 @@
                 "label": "Seaweed",
                 "ingredient_category": "garnish",
                 "icon": "seaweed.svg",
+                "constant": true,
                 "ingredients": {
                     "seaweed": {
                         "label": "Seaweed"
@@ -443,6 +444,7 @@
                 "label": "Radish Sprouts",
                 "ingredient_category": "garnish",
                 "icon": "sprouts.svg",
+                "constant": true,
                 "ingredients": {
                     "radish_sprout": {
                         "label": "Daikon Radish Sprouts"
