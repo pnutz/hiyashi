@@ -10,7 +10,7 @@ class AddOn extends PureComponent {
         */
         
         const icon = '/icons/' + this.props.icon
-        const nextValue = this.getNextValue(this.props.value, this.props.required)
+        const nextValue = this.getNextValue(this.props.value, this.props.required, this.props.constant)
         
         const disclaimer = (this.props.required) ? <div className="add-on-disclaimer"><small>*It wouldn't really be cold ramen if we forgot this, would it?</small></div> : '';
         
@@ -30,17 +30,17 @@ class AddOn extends PureComponent {
     }
     
     handleClick = () => {
-        const nextValue = this.getNextValue(this.props.value, this.props.required)
+        const nextValue = this.getNextValue(this.props.value, this.props.required, this.props.constant)
         this.props.onAddOnChange(this.props.category, this.props.addon, nextValue)
     }
     
-    getNextValue(value, required) {
+    getNextValue(value, required, constant) {
         switch (value) {
             case 0:
                 value = 1
                 break
             case 1:
-                value = 0.5
+                value = (constant) ? 0 : 0.5
                 break
             case 0.5:
                 value = 2

@@ -12,19 +12,14 @@ import RecipeStep from './RecipeStep'
 class Hiyashi extends Component {
     render() {
         const model = this.props.model
-        console.log(model)
-        
-        /**
-            TODO:
-            - recipe time
-            - nice to have: recipe presets from recipe compilation
-        */
 
         return (
             <div className="hiyashi">
                 <h1 className="title">Hiyashi Chuka!</h1>
                 <hr />
                 <p>For the love of cold ramen :)</p>
+                <p>Hiyashi chuka, or cold ramen, is a delicious Japanese dish served in the summer. Why wait for the summer when you can make it at home?</p>
+                <p>Every cold ramen recipe contains different ingredients, so you can be flexible to create a cold ramen custom to your tastes and dietary restrictions! Here are some ingredient suggestions for your hiyashi chuka.</p>
                 <p>Get started by selecting the contents of your hiyashi chuka!</p>
                 {this.getCategories(model)}
                 {this.getServings(model)}
@@ -50,6 +45,7 @@ class Hiyashi extends Component {
                         addon={addOn}
                         label={addOnData.label}
                         required={addOnData.required}
+                        constant={addOnData.constant}
                         icon={addOnData.icon}
                         onAddOnChange={this.handleAddOnChange}
                         value={selection} />
@@ -60,21 +56,23 @@ class Hiyashi extends Component {
                 categories.push(
                     <AddOnCategory
                         key={category}
-                        category={category}>
+                        category={model.getAddOnCategoryLabel(category)}>
                         {addOns}
                     </AddOnCategory>
                 )
             }
         }
         
-        return categories
+        return <div className="category-container">{categories}</div>
     }
     
     getServings(model) {
         const servings = model.getServings()
-        return <Servings
-                    onServingsChange={this.handleServingsChange}
-                    value={servings} />
+        return <div className="servings-container">
+                    <Servings
+                        onServingsChange={this.handleServingsChange}
+                        value={servings} />
+                </div>
     }
     
     handleAddOnChange = (category, addon, value) => {
@@ -99,8 +97,8 @@ class Hiyashi extends Component {
                         category={ingredientCategory}
                         ingredient={ingredient}
                         label={ingredientData.label}
-                        quantity={ingredientData.serving.formattedQuantity}
-                        unit={ingredientData.serving.unit} />
+                        quantity={(ingredientData.serving) ? ingredientData.serving.formattedQuantity : null}
+                        unit={(ingredientData.serving) ? ingredientData.serving.unit : null} />
                 )
             }
             
@@ -115,7 +113,7 @@ class Hiyashi extends Component {
             }
         }
         
-        return ingredients
+        return <div className="ingredients-container">{ingredients}</div>
     }
     
     getRecipe(model) {
@@ -127,7 +125,7 @@ class Hiyashi extends Component {
                     content={recipeStep} />
             )
         }
-        return <Recipe>{recipeSteps}</Recipe>
+        return <div className="recipe-container"><Recipe>{recipeSteps}</Recipe></div>
     }
 }
 

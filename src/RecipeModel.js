@@ -1,4 +1,4 @@
-import {deepClone} from './Utils'
+import {capitalize, deepClone} from './Utils'
 
 class RecipeModel {
     constructor(data) {
@@ -29,7 +29,7 @@ class RecipeModel {
     }
     
     getUnitAbbr(unit) {
-        return this.units[unit]
+        return (this.units[unit]) ? this.units[unit] : unit
     }
     
     getCategories() {
@@ -42,12 +42,23 @@ class RecipeModel {
     
     // expects ingredient object as stored in recipe addOn selection
     getIngredientString(ingredient) {
-        return ingredient.formattedQuantity + ' ' + ingredient.unit + ' of ' + ingredient.label
+        if (!ingredient.formattedQuantity) {
+            return ingredient.label
+        } else if (!ingredient.unit) {
+            return ingredient.formattedQuantity + ' ' + ingredient.label
+        } else {
+            return ingredient.formattedQuantity + ' ' + ingredient.unit + ' of ' + ingredient.label
+        }
     }
     
     getAddOn(category, addOn) {
         category = this.categories[category]
         return (category) ? category[addOn] : null
+    }
+    
+    getAddOnCategoryLabel(category) {
+        category = category.replace('_', ' & ')
+        return capitalize(category)
     }
     
     getIngredientCategoryLabel(category) {
@@ -142,8 +153,10 @@ class RecipeModel {
         const ingredients = this.getIngredients()
         for (const ingredientCategory in ingredients) {
             for (const ingredientKey in ingredients[ingredientCategory]) {
-                let quantity = ingredients[ingredientCategory][ingredientKey].serving.quantity
-                this.applyIngredientServings(ingredientCategory, ingredientKey, (quantity * newServings / oldServings))
+                let quantity = (ingredients[ingredientCategory][ingredientKey].serving) ? ingredients[ingredientCategory][ingredientKey].serving.quantity : null
+                if (quantity != null) {
+                    this.applyIngredientServings(ingredientCategory, ingredientKey, (quantity * newServings / oldServings))
+                }
             }
         }
     }
@@ -173,22 +186,28 @@ class RecipeModel {
             const ingredients = this.getIngredients()
             const ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : 'default'
             for (const ingredient in addOn.ingredients) {
-                const addedQuantity = value * addOn.ingredients[ingredient].serving.quantity
-
                 if (!ingredients.hasOwnProperty(ingredientCategory)) {
                     ingredients[ingredientCategory] = {}
                 }
-                
-                let newQuantity = addedQuantity
-                let unit = null
-                if (!ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
-                    ingredients[ingredientCategory][ingredient] = deepClone(addOn.ingredients[ingredient])
-                    unit = this.getUnitAbbr(ingredients[ingredientCategory][ingredient].serving.unit)
+                    
+                if (addOn.constant) {
+                    if (!ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
+                        ingredients[ingredientCategory][ingredient] = deepClone(addOn.ingredients[ingredient])
+                    }
                 } else {
-                    newQuantity += ingredients[ingredientCategory][ingredient].serving.quantity
+                    const addedQuantity = value * addOn.ingredients[ingredient].serving.quantity
+                    
+                    let newQuantity = addedQuantity
+                    let unit = null
+                    if (!ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
+                        ingredients[ingredientCategory][ingredient] = deepClone(addOn.ingredients[ingredient])
+                        unit = this.getUnitAbbr(ingredients[ingredientCategory][ingredient].serving.unit)
+                    } else {
+                        newQuantity += ingredients[ingredientCategory][ingredient].serving.quantity
+                    }
+                    
+                    this.applyIngredientServings(ingredientCategory, ingredient, newQuantity, unit)
                 }
-                
-                this.applyIngredientServings(ingredientCategory, ingredient, newQuantity, unit)
             }
         }
     }
@@ -202,19 +221,23 @@ class RecipeModel {
             const ingredients = this.getIngredients()
             const ingredientCategory = (addOn.hasOwnProperty('ingredient_category')) ? addOn.ingredient_category : 'default'
             for (const ingredient in addOn.ingredients) {
-                const removedQuantity = value * addOn.ingredients[ingredient].serving.quantity
-                
                 if (!ingredients.hasOwnProperty(ingredientCategory) ||
-                        !ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
-                    return
+                    !ingredients[ingredientCategory].hasOwnProperty(ingredient)) {
+                        return
                 }
                 
-                const currentQuantity = ingredients[ingredientCategory][ingredient].serving.quantity
-                const newQuantity = currentQuantity - removedQuantity
-                if (newQuantity <= 0) {
+                if (addOn.constant) {
                     delete ingredients[ingredientCategory][ingredient]
                 } else {
-                    this.applyIngredientServings(ingredientCategory, ingredient, newQuantity)
+                    const removedQuantity = value * addOn.ingredients[ingredient].serving.quantity
+                    
+                    const currentQuantity = ingredients[ingredientCategory][ingredient].serving.quantity
+                    const newQuantity = currentQuantity - removedQuantity
+                    if (newQuantity <= 0) {
+                        delete ingredients[ingredientCategory][ingredient]
+                    } else {
+                        this.applyIngredientServings(ingredientCategory, ingredient, newQuantity)
+                    }
                 }
                 
                 if (Object.keys(ingredients[ingredientCategory]).length === 0) {
@@ -230,12 +253,15 @@ class RecipeModel {
         
         const ingredients = {}
         for (const ingredient in addOn.ingredients) {
-            let quantity = value * addOn.ingredients[ingredient].serving.quantity
             ingredients[ingredient] = {
-                label: addOn.ingredients[ingredient].label,
-                quantity: quantity,
-                formattedQuantity: this.formatQuantity(quantity),
-                unit: addOn.ingredients[ingredient].serving.unit
+                label: addOn.ingredients[ingredient].label
+            }
+            
+            if (!addOn.constant) {
+                const quantity = value * addOn.ingredients[ingredient].serving.quantity
+                ingredients[ingredient].quantity = quantity
+                ingredients[ingredient].formattedQuantity = this.formatQuantity(quantity)
+                ingredients[ingredient].unit = addOn.ingredients[ingredient].serving.unit
             }
         }
         
@@ -292,7 +318,7 @@ class RecipeModel {
                     // replace all ingredient keys enclosed in {{ }} with ingredient values
                     const ingredientMatches = step.match(/{{.*?}}/g)
                     if (ingredientMatches) {
-                        for (const ingredientMatch in ingredientMatches) {
+                        for (const ingredientMatch of ingredientMatches) {
                             const stringLength = ingredientMatch.length
                             const ingredientKey = ingredientMatch.substring(2, stringLength - 2)
                             const ingredientContents = this.getIngredientString(addOn.ingredients[ingredientKey])

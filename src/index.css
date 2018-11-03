@@ -47,8 +47,17 @@ footer {
     max-width: 700px;
 }
 
+footer a {
+    color: #70E1E1;
+}
+
 footer hr {
     margin-bottom: 30px;
+}
+
+footer img.icon {
+    width: 50px;
+    margin-right: 10px;
 }
 
 @media only screen and (max-width: 700px) {
@@ -59,5 +68,6 @@ footer hr {
 }
 
 footer .credits {
+    margin-top: 10px;
     font-size: 0.8em;
 }

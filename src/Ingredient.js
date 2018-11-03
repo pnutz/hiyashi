@@ -15,14 +15,28 @@ class Ingredient extends PureComponent {
         if (!this.state.active) {
             className += ' inactive'
         }
+        
+        const label = this.getIngredientLabel()
     
         return (
             <li
                 className={className}
                 onClick={this.onClick}>
-                {this.props.label} {this.props.quantity} {this.props.unit}
+                {label}
             </li>
         )
+    }
+    
+    getIngredientLabel() {
+        if (this.props.quantity) {
+            if (this.props.unit) {
+                return this.props.label + ' ' + this.props.quantity + ' ' + this.props.unit
+            } else {
+                return this.props.quantity + ' ' + this.props.label
+            }
+        } else {
+            return this.props.label
+        }
     }
     
     onClick = () => {

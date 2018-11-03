@@ -1,6 +1,7 @@
 module.exports = {
     capitalize: function(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1)
+        const words = string.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        return words.join(' ')
     },
     
     deepClone: function(object) {

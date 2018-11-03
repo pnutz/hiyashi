@@ -4,16 +4,17 @@
         "tablespoons": "tbsp",
         "teaspoons": "tsp",
         "minutes": "min",
-        "cups": "cups"
+        "grams": "g"
     },
     "ingredient_categories": {
         "default": "Ingredients",
         "soy_sauce": "Soy Sauce Dressing Ingredients",
-        "sesame_dressing": "Sesame Dressing Ingredients"
+        "sesame_dressing": "Sesame Dressing Ingredients",
+        "garnish": "Garnish"
     },
     "categories": {
         "noodles": {
-            "ramen_noodles": {
+            "ramen_noodle": {
                 "label": "Chilled Ramen Noodles",
                 "required": true,
                 "icon": "chinese-food.svg",
@@ -101,7 +102,8 @@
                     }
                 },
                 "recipe": [
-                    "Combine all the soy sauce dressing ingredients in a medium bowl and whisk all together. Refrigerator to chill."
+                    "Combine all the soy sauce dressing ingredients in a medium bowl and whisk all together. Refrigerator to chill.",
+                    "Pour the soy sauce dressing over the noodles or serve on the side."
                 ]
             },
             "sesame_dressing": {
@@ -151,7 +153,7 @@
                             "unit": "tablespoons"
                         }
                     },
-                    "sesame_seeds": {
+                    "sesame_seed": {
                         "label": "Sesame Seeds (Roasted/Toasted)",
                         "serving": {
                             "quantity": 0.125,
@@ -160,21 +162,355 @@
                     }
                 },
                 "recipe": [
-                    "Put all the sesame dressing ingredients in a small sauce pan over high heat. Bring it to a bowl and simmer for a few minutes or until all ingredients have dissolved. Turn the heat off and put it aside to cool down. Refrigerate to chill."
+                    "Put all the sesame dressing ingredients in a small sauce pan over high heat. Bring it to a bowl and simmer for a few minutes or until all ingredients have dissolved. Turn the heat off and put it aside to cool down. Refrigerate to chill.",
+                    "Pour the sesame dressing over the noodles or serve on the side."
                 ]
             }
         },
         "meats": {
+            "egg": {
+                "label": "Shredded Egg",
+                "icon": "egg-outline.svg",
+                "ingredients": {
+                    "egg": {
+                        "label": "Eggs",
+                        "serving": {
+                            "quantity": 0.5
+                        }
+                    },
+                    "sugar": {
+                        "label": "Granulated Sugar",
+                        "serving": {
+                            "quantity": 0.166,
+                            "unit": "tablespoons"
+                        }
+                    },
+                    "salt": {
+                        "label": "Salt",
+                        "serving": {
+                            "quantity": 0.125,
+                            "unit": "teaspoons"
+                        }
+                    }
+                },
+                "recipe": [
+                    "Whisk {{egg}}, {{sugar}}, and {{salt}} together until the white and yolk are evenly combined.",
+                    "Spread a light coating of oil onto a non-stick pan over medium heat.",
+                    "Pour the egg mixture into the non-stick pan and cook on both sides.",
+                    "Cool the egg crepe, roll them up, and slice into very thin strips. Add on top of chilled noodles."
+                ]
+            },
+            "chicken": {
+                "label": "Chicken",
+                "icon": "chicken.svg",
+                "ingredients": {
+                    "chicken": {
+                        "label": "Chicken Breast",
+                        "serving": {
+                            "quantity": 4,
+                            "unit": "ounces"
+                        }
+                    },
+                    "ginger": {
+                        "label": "Ginger",
+                        "serving": {
+                            "quantity": 0.5,
+                            "unit": "inches"
+                        }
+                    },
+                    "green_onion": {
+                        "label": "Green Onions",
+                        "serving": {
+                            "quantity": 1
+                        }
+                    },
+                    "sake": {
+                        "label": "Sake",
+                        "serving": {
+                            "quantity": 1,
+                            "unit": "tablepoons"
+                        }
+                    },
+                    "salt": {
+                        "label": "Salt",
+                        "serving": {
+                            "quantity": 0.5,
+                            "unit": "teaspoons"
+                        }
+                    }
+                },
+                "time": {
+                    "cook": {
+                        "quantity": 15,
+                        "unit": "minutes"
+                    }
+                },
+                "recipe": [
+                    "Slice {{ginger}} into thin slices. Cut {{green_onion}} into 2-inch pieces. Set aside for chicken.",
+                    "Add 4 cups of water to a pot. Add {{chicken}}, {{ginger}}, {{green_onion}}, {{sake}}, and {{salt}} to the pot and bring water to a boil on medium heat. Once boiling, skim off foam and scum.",
+                    "Lower the heat for the chicken pot of water to low and cover to cook for 15 minutes.",
+                    "Remove chicken breast from the water and shred it using two forks. Add on top of chilled noodles."
+                ]
+            },
+            "ham": {
+                "label": "Ham",
+                "icon": "ham.svg",
+                "ingredients": {
+                    "ham": {
+                        "label": "Ham",
+                        "serving": {
+                            "quantity": 25,
+                            "unit": "grams"
+                        }
+                    }
+                },
+                "recipe": [
+                    "Shave the ham. Add on top of chilled noodles."
+                ]
+            }
         },
         "seafoods": {
+            "crab_stick": {
+                "label": "Crab Sticks",
+                "icon": "crab.svg",
+                "ingredients": {
+                    "crab_stick": {
+                        "label": "Crab Sticks",
+                        "serving": {
+                            "quantity": 2
+                        }
+                    }
+                },
+                "recipe": [
+                    "Break the crab sticks into bite size pieces with your hands. Add on top of chilled noodles."
+                ]
+            },
+            "shrimp": {
+                "label": "Shrimp",
+                "icon": "big-shrimp.svg",
+                "ingredients": {
+                    "shrimp": {
+                        "label": "Shrimp",
+                        "serving": {
+                            "quantity": 2
+                        }
+                    },
+                    "sake": {
+                        "label": "Sake",
+                        "serving": {
+                            "quantity": 0.333,
+                            "unit": "tablespoons"
+                        }
+                    }
+                },
+                "recipe": [
+                    "Add peeled {{shrimp}} and {{sake}} to a small pot of boiling water and cover with the lid.",
+                    "Turn off the heat for pot of water when the color of shrimp starts to change and let it cook with remaining heat.",
+                    "Once fully cooked, transfer shrimp to a plate and let them cool. Add on top of chilled noodles."
+                ]
+            }
         },
-        "fruits": {
-        },
-        "vegetables": {
+        "fruits_vegetables": {
+            "cucumber": {
+                "label": "Cucumbers",
+                "icon": "cucumber.svg",
+                "ingredients": {
+                    "cucumber": {
+                        "label": "Japanese Cucumbers",
+                        "serving": {
+                            "quantity": 0.25
+                        }
+                    }
+                },
+                "recipe": [
+                    "Cut the cucumber into thin sticks. Add on top of chilled noodles."
+                ]
+            },
+            "tomato": {
+                "label": "Tomatoes",
+                "icon": "tomato.svg",
+                "ingredients": {
+                    "tomato": {
+                        "label": "Tomatoes",
+                        "serving": {
+                            "quantity": 0.5
+                        }
+                    }
+                },
+                "recipe": [
+                    "Slice the tomato thinly. Add on top of chilled noodles."
+                ]
+            },
+            "lettuce": {
+                "label": "Lettuce",
+                "icon": "lettuce.svg",
+                "ingredients": {
+                    "lettuce": {
+                        "label": "Iceberg Lettuce",
+                        "serving": {
+                            "quantity": 1,
+                            "unit": "leaves"
+                        }
+                    }
+                },
+                "recipe": [
+                    "Add lettuce on top of chilled noodles."
+                ]
+            },
+            "bean_sprout": {
+                "label": "Bean Sprouts",
+                "icon": "sprout.svg",
+                "ingredients": {
+                    "bean_sprout": {
+                        "label": "Bean Sprouts",
+                        "serving": {
+                            "quantity": 0.25,
+                            "unit": "cups"
+                        }
+                    }
+                },
+                "time": {
+                    "cook": {
+                        "quantity": 2,
+                        "unit": "minutes"
+                    }
+                },
+                "recipe": [
+                    "Blanch bean sprouts in a pot of water for 2 minutes over high heat.",
+                    "Let bean sprouts cool. Add on top of chilled noodles."
+                ]
+            },
+            "carrot": {
+                "label": "Carrots",
+                "icon": "carrot.svg",
+                "ingredients": {
+                    "carrot": {
+                        "label": "Carrots",
+                        "serving": {
+                            "quantity": 0.5
+                        }
+                    }
+                },
+                "recipe": [
+                    "Grate carrots. Add on top of chilled noodles."
+                ]
+            },
+            "corn": {
+                "label": "Corn",
+                "icon": "corn.svg",
+                "ingredients": {
+                    "corn": {
+                        "label": "Corn Kernels",
+                        "serving": {
+                            "quantity": 0.25,
+                            "unit": "cups"
+                        }
+                    }
+                },
+                "recipe": [
+                    "Boil corn kernels in a pot of water until fully cooked. Strain and add on top of chilled noodles."
+                ]
+            },
+            "red_pepper": {
+                "label": "Red Peppers",
+                "icon": "pepper.svg",
+                "ingredients": {
+                    "red_pepper": {
+                        "label": "Red Peppers",
+                        "serving": {
+                            "quantity": 0.25
+                        }
+                    }
+                },
+                "recipe": [
+                    "Slice red peppers into thin slices. Add on top of chilled noodles."
+                ]
+            },
+            "seaweed": {
+                "label": "Seaweed",
+                "ingredient_category": "garnish",
+                "icon": "seaweed.svg",
+                "ingredients": {
+                    "seaweed": {
+                        "label": "Seaweed"
+                    }
+                },
+                "recipe": [
+                    "Garnish chilled noodles with shredded seaweed."
+                ]
+            },
+            "radish_sprout": {
+                "label": "Radish Sprouts",
+                "ingredient_category": "garnish",
+                "icon": "sprouts.svg",
+                "ingredients": {
+                    "radish_sprout": {
+                        "label": "Daikon Radish Sprouts"
+                    }
+                },
+                "recipe": [
+                    "Garnish chilled noodles with radish sprouts."
+                ]
+            },
+            "cilantro": {
+                "label": "Cilantro",
+                "ingredient_category": "garnish",
+                "icon": "parsley.svg",
+                "constant": true,
+                "ingredients": {
+                    "cilantro": {
+                        "label": "Cilantro"
+                    }
+                },
+                "recipe": [
+                    "Garnish chilled noodles with cilantro."
+                ]
+            },
+            "pickled_ginger": {
+                "label": "Pickled Red Ginger",
+                "ingredient_category": "garnish",
+                "icon": "ginger.svg",
+                "constant": true,
+                "ingredients": {
+                    "pickled_ginger": {
+                        "label": "Pickled Red Ginger"
+                    }
+                },
+                "recipe": [
+                    "Garnish chilled noodles with pickled ginger."
+                ]
+            },
+            "watermelon": {
+                "label": "Watermelon",
+                "ingredient_category": "garnish",
+                "icon": "watermelon.svg",
+                "constant": true,
+                "ingredients": {
+                    "watermelon": {
+                        "label": "Watermelon"
+                    }
+                },
+                "recipe": [
+                    "Garnish chilled noodles with thin slices of watermelon."
+                ]
+            }
         },
         "dairy": {
         },
         "condiments": {
+            "mustard": {
+                "label": "Karashi Hot Mustard",
+                "icon": "sauce.svg",
+                "constant": true,
+                "ingredients": {
+                    "mustard": {
+                        "label": "Karashi Hot Mustard"
+                    }
+                },
+                "recipe": [
+                    "Serve with karashi hot mustard on the side."
+                ]
+            }
         }
     }
 }
