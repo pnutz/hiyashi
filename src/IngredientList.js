@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react'
+import PropTypes from 'prop-types'
 
 class IngredientList extends PureComponent {
     render() {
@@ -9,6 +10,10 @@ class IngredientList extends PureComponent {
                 </ul>
             </div>;
     }
+}
+
+IngredientList.propTypes = {
+    category: PropTypes.string.isRequired
 }
 
 export default IngredientList

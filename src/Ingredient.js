@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react'
+import PropTypes from 'prop-types'
 
 import './List.css'
 
@@ -48,6 +49,14 @@ class Ingredient extends PureComponent {
             this.setState({ active: true })
         }
     }
+}
+
+Ingredient.propTypes = {
+    category: PropTypes.string.isRequired,
+    ingredient: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    quantity: PropTypes.number,
+    unit: PropTypes.string
 }
 
 export default Ingredient

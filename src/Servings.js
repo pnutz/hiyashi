@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react'
+import PropTypes from 'prop-types'
 
 import './Servings.css'
 
@@ -22,6 +23,11 @@ class Servings extends PureComponent {
     handleChange = (event) => {
         this.props.onServingsChange(event.target.value)
     }
+}
+
+Servings.propTypes = {
+    value: PropTypes.number.isRequired,
+    onServingsChange: PropTypes.func.isRequired
 }
 
 export default Servings

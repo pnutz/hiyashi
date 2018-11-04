@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react'
+import PropTypes from 'prop-types'
 
 class AddOnCategory extends PureComponent {
     render() {
@@ -11,6 +12,10 @@ class AddOnCategory extends PureComponent {
             </div>
         )
     }
+}
+
+AddOnCategory.propTypes = {
+    category: PropTypes.string.isRequired
 }
 
 export default AddOnCategory

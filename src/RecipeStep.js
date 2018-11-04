@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react'
+import PropTypes from 'prop-types'
 
 import './List.css'
 
@@ -34,6 +35,10 @@ class RecipeStep extends PureComponent {
             this.setState({ active: true })
         }
     }
+}
+
+RecipeStep.propTypes = {
+    content: PropTypes.string.isRequired
 }
 
 export default RecipeStep

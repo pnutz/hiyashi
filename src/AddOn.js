@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react'
+import PropTypes from 'prop-types'
 
 import './AddOn.css'
 
@@ -52,6 +53,17 @@ class AddOn extends PureComponent {
         
         return value
     }
+}
+
+AddOn.propTypes = {
+    category: PropTypes.string.isRequired,
+    addon: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    required: PropTypes.bool,
+    constant: PropTypes.bool,
+    icon: PropTypes.string.isRequired,
+    value: PropTypes.number.isRequired,
+    onAddOnChange: PropTypes.func.isRequired
 }
 
 export default AddOn
