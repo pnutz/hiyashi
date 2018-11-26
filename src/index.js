@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import WebFont from 'webfontloader'
 
 import './index.css'
-import data from './data.json'
+import data from './data/data.json'
 import RecipeModel from './RecipeModel'
 import Hiyashi from './App'
 import registerServiceWorker from './registerServiceWorker'

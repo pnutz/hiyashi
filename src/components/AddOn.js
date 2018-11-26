@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react'
 import PropTypes from 'prop-types'
 
-import './AddOn.css'
+import styles from './AddOn.module.css'
 
 class AddOn extends PureComponent { 
     render() {
@@ -12,18 +12,18 @@ class AddOn extends PureComponent {
         
         const nextValue = this.getNextValue(this.props.value, this.props.required, this.props.constant)
         
-        const disclaimer = (this.props.required) ? <div className="add-on-disclaimer"><small>*It wouldn't really be cold ramen if we forgot this, would it?</small></div> : '';
+        const disclaimer = (this.props.required) ? <div className={styles.disclaimer}><small>*It wouldn't really be cold ramen if we forgot this, would it?</small></div> : '';
         
         return (
-            <div className="add-on-container">
+            <div className={styles.container}>
                 <div
-                    className="add-on"
+                    className={styles.addon}
                     data-value={this.props.value}
                     data-next-value={nextValue}
                     onClick={this.handleClick}>
-                    <img className="icon" src={this.props.icon} alt=""></img>
+                    <img className={styles.icon} src={this.props.icon} alt=""></img>
                 </div>
-                <div className="add-on-label">{this.props.label}{(this.props.required) ? '*' : ''}</div>
+                <div className={styles.label}>{this.props.label}{(this.props.required) ? '*' : ''}</div>
                 {disclaimer}
             </div>
         )

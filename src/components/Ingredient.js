@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react'
 import PropTypes from 'prop-types'
 
-import './List.css'
+import styles from './List.module.css'
 
 class Ingredient extends PureComponent { 
     constructor(props) {
@@ -11,17 +11,12 @@ class Ingredient extends PureComponent {
     }
     
     render() {
-        let className = 'list-item ingredient'
-        
-        if (!this.state.active) {
-            className += ' inactive'
-        }
-        
+        const activeClass = (!this.state.active) ? styles.inactive : ''
         const label = this.getIngredientLabel()
-    
+
         return (
             <li
-                className={className}
+                className={styles.item + ' ' + activeClass}
                 onClick={this.onClick}>
                 {label}
             </li>

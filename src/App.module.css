@@ -13,9 +13,6 @@ h1.title {
     text-align: center;
 }
 
-.hiyashi .category-container,
-.hiyashi .servings-container,
-.hiyashi .ingredients-container,
-.hiyashi .recipe-container {
+.container {
     margin-top: 40px;
 }

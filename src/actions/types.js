@@ -1,0 +1,2 @@
+export const SET_SERVINGS = 'SET_SERVINGS'
+export const CHANGE_ADD_ON = 'CHANGE_ADD_ON'
